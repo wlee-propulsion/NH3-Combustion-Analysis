@@ -126,7 +126,7 @@ def plot_adiabatic_results(results):
     delta_T_vals = [r['delta_T'] for r in results]
 
     # Create output directory
-    output_dir = Path("results")
+    output_dir = Path("../results")
     output_dir.mkdir(exist_ok=True)
 
     # Plot 1: Adiabatic flame temperature vs equivalence ratio
@@ -219,7 +219,7 @@ def compare_with_methane():
             plt.grid(True, alpha=0.3)
             plt.tight_layout()
 
-            output_dir = Path("results")
+            output_dir = Path("../results")
             output_dir.mkdir(exist_ok=True)
             plt.savefig(output_dir / "fuel_comparison.png", dpi=150)
             plt.show()
