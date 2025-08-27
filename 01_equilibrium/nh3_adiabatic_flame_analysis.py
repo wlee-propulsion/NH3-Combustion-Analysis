@@ -13,7 +13,8 @@ from pathlib import Path
 # =============================================================================
 # CONFIGURATION
 # =============================================================================
-MECHANISM = "/Users/imsi/PycharmProjects/NH3-Combustion-Analysis/MEI_2019.yaml"  # NH3 mechanism
+SCRIPT_DIR = Path(__file__).resolve().parent
+MECHANISM = (SCRIPT_DIR.parent / "MEI_2019.yaml").as_posix()  # NH3 mechanism
 FUEL = "NH3"
 CONDITIONS = {
     'pressure': ct.one_atm,  # [Pa]
@@ -21,7 +22,10 @@ CONDITIONS = {
     'phi_range': [0.6, 0.8, 1.0, 1.2, 1.4]  # Equivalence ratio range
 }
 
-
+def get_output_dir():
+    out = SCRIPT_DIR / "results"
+    out.mkdir(parents=True, exist_ok=True)
+    return out
 # =============================================================================
 # ANALYSIS FUNCTIONS
 # =============================================================================
@@ -126,7 +130,7 @@ def plot_adiabatic_results(results):
     delta_T_vals = [r['delta_T'] for r in results]
 
     # Create output directory
-    output_dir = Path("../results")
+    output_dir = get_output_dir()
     output_dir.mkdir(exist_ok=True)
 
     # Plot 1: Adiabatic flame temperature vs equivalence ratio
@@ -218,8 +222,7 @@ def compare_with_methane():
             plt.legend()
             plt.grid(True, alpha=0.3)
             plt.tight_layout()
-
-            output_dir = Path("../results")
+            output_dir = get_output_dir()
             output_dir.mkdir(exist_ok=True)
             plt.savefig(output_dir / "fuel_comparison.png", dpi=150)
             plt.show()
