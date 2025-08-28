@@ -377,7 +377,6 @@ def main():
         print(f"  → tau = {min_result['ignition_delay']*1000:.1f} ms")
 
         print(f"\nAnalysis complete. Results saved in 'results/' directory.")
-        print(f"Industrial relevance: Data critical for furnace safety and burner design")
 
     else:
         print("Analysis failed. Check mechanism file path and conditions.")
