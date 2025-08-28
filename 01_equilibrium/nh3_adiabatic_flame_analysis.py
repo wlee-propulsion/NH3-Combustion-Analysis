@@ -80,7 +80,7 @@ def calculate_adiabatic_conditions(mechanism, fuel, phi, T_initial, p_initial):
         }
 
     except Exception as e:
-        print(f"Error for φ={phi}: {e}")
+        print(f"Error for $\phi$={phi}: {e}")
         return None
 
 
@@ -106,8 +106,8 @@ def analyze_nh3_equilibrium():
             results.append(result)
 
             # Print summary
-            print(f"φ = {phi:.2f}")
-            print(f"  T_ad = {result['T_adiabatic']:.1f} K  (ΔT = +{result['delta_T']:.1f} K)")
+            print(f"  phi = {phi:.2f}")
+            print(f"  T_ad = {result['T_adiabatic']:.1f} K  (deltaT = +{result['delta_T']:.1f} K)")
             print(f"  Major species:")
             for name, X in result['major_species'][:5]:  # Top 5
                 print(f"    {name:>6s}: X = {X:.4f}")
@@ -138,7 +138,7 @@ def plot_adiabatic_results(results):
 
     # Temperature plot
     ax1.plot(phi_vals, T_ad_vals, 'ro-', linewidth=2, markersize=8)
-    ax1.set_xlabel('Equivalence Ratio φ')
+    ax1.set_xlabel('Equivalence Ratio $\phi$')
     ax1.set_ylabel('Adiabatic Flame Temperature [K]')
     ax1.set_title(f'{FUEL}–Air Adiabatic Flame Temperature')
     ax1.grid(True, alpha=0.3)
@@ -152,8 +152,8 @@ def plot_adiabatic_results(results):
 
     # Temperature rise plot  
     ax2.plot(phi_vals, delta_T_vals, 'bo-', linewidth=2, markersize=8)
-    ax2.set_xlabel('Equivalence Ratio φ')
-    ax2.set_ylabel('Temperature Rise ΔT [K]')
+    ax2.set_xlabel('Equivalence Ratio $\phi$')
+    ax2.set_ylabel('Temperature Rise $\delta$T [K]')
     ax2.set_title('Temperature Rise from Combustion')
     ax2.grid(True, alpha=0.3)
 
@@ -162,7 +162,7 @@ def plot_adiabatic_results(results):
     plt.show()
 
     # Plot 2: Major species composition at stoichiometric conditions
-    # Find stoichiometric result (φ=1.0)
+    # Find stoichiometric result (phi=1.0)
     stoich_result = next((r for r in results if abs(r['phi'] - 1.0) < 0.01), None)
 
     if stoich_result:
@@ -174,7 +174,7 @@ def plot_adiabatic_results(results):
 
         plt.xlabel('Species')
         plt.ylabel('Mole Fraction')
-        plt.title(f'{FUEL}–Air Equilibrium Products (φ=1.0, T_ad={stoich_result["T_adiabatic"]:.0f}K)')
+        plt.title(f'{FUEL}–Air Equilibrium Products ($\phi$=1.0, $T_{{ad}}$={stoich_result["T_adiabatic"]:.0f}K)')
         plt.xticks(range(len(species_names)), species_names, rotation=45)
         plt.yscale('log')
         plt.grid(True, alpha=0.3)
@@ -216,7 +216,7 @@ def compare_with_methane():
             plt.figure(figsize=(8, 6))
             plt.plot(phi_vals, nh3_temps, 'ro-', label='NH3-Air', linewidth=2)
             plt.plot(phi_vals, ch4_temps, 'bo-', label='CH4-Air', linewidth=2)
-            plt.xlabel('Equivalence Ratio φ')
+            plt.xlabel('Equivalence Ratio $\phi$')
             plt.ylabel('Adiabatic Flame Temperature [K]')
             plt.title('Fuel Comparison: Adiabatic Flame Temperature')
             plt.legend()
@@ -252,8 +252,9 @@ def main():
         # Extract nitrogen-containing products for stoichiometric case
         stoich = next((r for r in results if abs(r['phi'] - 1.0) < 0.01), None)
         if stoich:
-            n_species = [s for s in stoich['major_species'] if 'N' in s[0] and s[0] not in ['N2']]
-            print(f"Nitrogen products (φ=1.0): {[s[0] for s in n_species]}")
+            n_species = [s for s in stoich['major_species'] if 'N' in s[0]]
+            print(f"All nitrogen species (phi=1.0): {[(s[0], f'{s[1]:.6f}') for s in n_species]}")
+            print(f"Nitrogen products (phi=1.0): {[s[0] for s in n_species]}")
 
     else:
         print("Analysis failed. Check mechanism file path and Cantera installation.")
